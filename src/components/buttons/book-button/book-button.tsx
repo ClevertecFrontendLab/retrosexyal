@@ -8,16 +8,16 @@ type TProps = {
 
 export const BookButton: React.FC<TProps> = ({ title, className }) => {
   let buttonColor = "";
-  if (title.toLowerCase() === "забронирована") {
-    buttonColor = styles.reserved;
-  } else if (
-    title.toLowerCase().startsWith('занята')
-  ) {
-    buttonColor = styles.inactive;
+  if (title) {
+    if (title.toLowerCase() === "забронирована") {
+      buttonColor = styles.reserved;
+    } else if (title.toLowerCase().startsWith("занята")) {
+      buttonColor = styles.inactive;
+    }
   }
   return (
     <div className={`${styles.wrapper} ${buttonColor} ${className} `}>
-      {title}
+      {title || "нет инфо"}
     </div>
   );
 };

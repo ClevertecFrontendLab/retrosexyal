@@ -6,18 +6,22 @@ import React, {
   useLayoutEffect,
 } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import { ReactComponent as Burger } from "../../assets/svg/burger_icon.svg";
 import { ReactComponent as BurgerActive } from "../../assets/svg/burger_icon_active.svg";
 import { BurgerMenuComp } from "../../components/burger-menu-comp";
 import { Logo } from "../../components/logo";
 import { MenuContant } from "../../components/menu-contant";
 import { Person } from "../../components/person";
-import { Menu } from "../menu";
+import { Error } from "../../components/error";
 import styles from "./header.module.scss";
+
+import { RootState } from "../../redux/store";
 
 export const Header = () => {
   const [isPressed, setIsPressed] = useState(false);
-
+  const { status } = useSelector((state: RootState) => state.books);
   const refMenu = createRef<HTMLDivElement>();
 
   const handleBurger = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -57,6 +61,7 @@ export const Header = () => {
 
   return (
     <div className={styles.header_wrapper}>
+      {status === "error" && <Error/>}
       <Link className={styles.none} to="/">
         <Logo />
       </Link>

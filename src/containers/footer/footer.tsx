@@ -1,4 +1,5 @@
 import React from "react";
+
 import { SocialBar } from "../../components/social-bar";
 
 import styles from "./footer.module.scss";

@@ -52,10 +52,7 @@ export const Book: React.FC<TProps> = ({
             <Rating width="current" height="current" rating={rating} />
           </div>
           <div className={styles.button_wrapper}>
-            <BookButton
-              title={status}
-              className={styles.button_line}
-            />
+            <BookButton title={status} className={styles.button_line} />
           </div>
         </div>
       </div>

@@ -1,47 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import styles from "./books.module.scss";
 import { Book } from "../../components/book";
 import { arrOfBooks } from "../../constants/constants";
-
-interface IBook {
-  id: number;
-  img: string;
-  rating: number;
-  name: string;
-  autor: string;
-  status: string;
-}
-
-interface RootState {
-  bookThemeReducer: {
-    value: boolean;
-  };
-}
+import { RootState, useAppDispatch } from "../../redux/store";
+import { fetchBooks } from "../../redux/slices/book-slice";
+import { IBook } from "../../types/types";
 
 export const Books = () => {
+  const dispatch = useAppDispatch();
+ 
+  const { books, loading } = useSelector((state: RootState) => state.books);
   const bookTheme = useSelector(
     (state: RootState) => state.bookThemeReducer.value
   );
+  useEffect(() => {
+    dispatch(fetchBooks());
+   
+  }, [dispatch]);
   return (
     <div className={styles.wrapper}>
-      {arrOfBooks.map((e: IBook) => (
+       {!loading && books.map((e: IBook) => (
         <Link
           to={`book/:${e.id}`}
           key={e.id}
           className={bookTheme ? styles.book_wrapp : styles.book_wrapp2}
         >
           <Book
-            img={e.img}
-            rating={e.rating}
-            name={e.name}
-            autor={e.autor}
-            status={e.status}
+            img={`https://strapi.cleverland.by${e.image?.url}`}
+            rating={e?.rating}
+            name={e?.title}
+            autor={e?.authors[0]}
+            status={e.delivery?.dateHandedFrom}
           />
         </Link>
       ))}
+      {/* {loading && <div>загрузка</div>} */}
+      {/* {!loading && <div>{books.map((e)=>e.delivery?.dateHandedFrom)}</div>} */}
     </div>
   );
 };
