@@ -37,8 +37,6 @@ export const Books = () => {
           />
         </Link>
       ))}
-      {/* {loading && <div>загрузка</div>} */}
-      {/* {!loading && <div>{books.map((e)=>e.delivery?.dateHandedFrom)}</div>} */}
     </div>
   );
 };

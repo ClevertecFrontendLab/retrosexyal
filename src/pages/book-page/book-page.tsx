@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { BookButton } from "../../components/buttons/book-button";
 import { PathToBook } from "../../components/path-to-book";
@@ -9,10 +10,14 @@ import styles from "./book-page.module.scss";
 import { Review } from "../../components/review";
 import { Slider } from "../../components/slider";
 import emptyBookImg from "../../assets/png/empty-book-img.png";
+import { RootState, useAppDispatch } from "../../redux/store";
+
 
 export const BookPage = () => {
   const [isActive, setIsActive] = useState(false);
   const { id } = useParams();
+  const dispatch = useAppDispatch();
+  const currentBook = useSelector((state:RootState)=>state.books.books)
   const book = arrOfBooks.filter((e) =>
     id ? e.id.toString() === id?.slice(1) : null
   );

@@ -3,14 +3,18 @@ import axios from "axios";
 import type { IBook, BooksState } from "../../types/types";
 import { Status } from "../../types/types";
 
+/* interface IProps {
+  id: string;
+} */
+
 const initialState: BooksState = {
   books: [],
   loading: false,
   status: Status.LOADING,
 };
 
-export const fetchBooks = createAsyncThunk("bookSlice/getBooks", async () => {
-  const responce = await axios.get("https://strapi.cleverland.by/api/books");
+export const fetchBooks = createAsyncThunk("bookSlice/getBooks", async (id?:string) => {
+  const responce = await axios.get(`https://strapi.cleverland.by/api/books/${id || ""}`);
   const data = await responce.data;
   return data as IBook[];
 });
@@ -20,25 +24,29 @@ export const bookSlice = createSlice({
   initialState,
   reducers: {
     getBooks(state, action: PayloadAction<BooksState>) {
-      state = action.payload;
+      const thisState = state;
+      thisState.books = action.payload.books;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(
       fetchBooks.fulfilled,
       (state, action: PayloadAction<IBook[]>) => {
-        state.books = action.payload;
-        state.loading = false;
-        state.status = Status.COMLETED;
+        const thisState = state;
+        thisState.books = action.payload;
+        thisState.loading = false;
+        thisState.status = Status.COMLETED;
       }
     );
     builder.addCase(fetchBooks.pending, (state) => {
-      state.loading = true;
-      state.status = Status.LOADING;
+      const thisState = state;
+      thisState.loading = true;
+      thisState.status = Status.LOADING;
     });
     builder.addCase(fetchBooks.rejected, (state) => {
-      state.loading = false;
-      state.status = Status.ERROR;
+      const thisState = state;
+      thisState.loading = false;
+      thisState.status = Status.ERROR;
     });
   },
 });
