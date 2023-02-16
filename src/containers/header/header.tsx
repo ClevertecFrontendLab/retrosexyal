@@ -62,8 +62,7 @@ export const Header = () => {
 
   return (
     <div className={styles.header_wrapper}>
-      {status === "error" && <Error />}
-      {categorys.status === "error" && <Error />}
+      {(status === "error" || categorys.status === "error") && <Error />}
       <Link className={styles.none} to="/">
         <Logo />
       </Link>

@@ -18,10 +18,5 @@ export const LoaderErrorCont = () => {
       style.overflow = "auto";
     };
   }, [loading]);
-  return (
-    <div>
-      {loading  && <Loader />}
-      {categorys.loading && <Loader />}
-    </div>
-  );
+  return <div>{(loading || categorys.loading) && <Loader />}</div>;
 };

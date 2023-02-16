@@ -16,6 +16,7 @@ import { fetchBooks } from "../../redux/slices/book-slice";
 export const BookPage = () => {
   const [isActive, setIsActive] = useState(false);
   const { id } = useParams();
+  const currentId = id?.startsWith(":")? id.slice(1) : id;
   const dispatch = useAppDispatch();
   const currentBook = useSelector((state: RootState) => state.books.book);
   const book = arrOfBooks;
@@ -24,11 +25,13 @@ export const BookPage = () => {
   const toggleComments = () => {
     setIsActive((prev) => !prev);
   };
+
   useEffect(() => {
-    if (currentBook && id && `${currentBook.id}` === id?.slice(1)) {
+    console.log(id)
+    if (currentBook && id && `${currentBook.id}` === currentId) {
       console.log(currentBook);
-    } else dispatch(fetchBooks(id?.slice(1)));
-  }, [dispatch, id, currentBook]);
+    } else dispatch(fetchBooks(currentId));
+  }, [dispatch, id, currentBook, currentId]);
   return (
     <>
       {currentBook && (
