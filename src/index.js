@@ -25,7 +25,7 @@ root.render(
           <Header />
           <Routes>
             <Route path="/*" element={<MainPage />} />
-            <Route path="/book/:id" element={<BookPage />} />
+            <Route path="/books/all/:id" element={<BookPage />} />
             <Route path="/test" element={<Slider />} />
           </Routes>
           <Footer />

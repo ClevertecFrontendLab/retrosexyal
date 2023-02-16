@@ -21,35 +21,46 @@
   .wrapper {
     position: absolute;
     background: #f9f9fa;
-    width: 100vw;
     height: 64px;
     z-index: -1;
-    $marg: calc((-100vw + 1110px) / 2);
+    $marg: calc((-100vw + 1130px) / 2);
     left: $marg;
+    width: calc(100% - #{$marg} * 2);
 
     @media (max-width: 1440px) {
       left: -165px;
+      width: 98vw;
     }
     @media (max-width: 1250px) {
       left: -50px;
+      width: 98vw;
     }
     @media (max-width: 869px) {
       left: -64px;
       height: 88px;
+      width: 97vw;
     }
     @media (max-width: 868px) and (min-width:768px) {
       $marg: calc((-100vw + 643px) / 2);
     left: $marg;
+    width: 97vw;
+    }
+    @media (max-width: 560px) {
+      height: 96px;
+      width: 96vw;
     }
     @media (max-width: 420px) {
       height: 96px;
+      width: 97vw;
     }
     @media (max-width: 452px) {
       left: -16px;
+      width: 97vw;
     }
     @media (max-width: 452px) and (min-width: 320px){
       $marg: calc((-100vw + 288px) / 2);
     left: $marg;
+    width: 97vw;
     }
   }
   .content_wrapper {

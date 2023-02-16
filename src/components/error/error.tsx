@@ -10,7 +10,7 @@ export const Error = () => {
     setIsClose(true);
   };
   return (
-    <div className={!isClose ? styles.wrapper : styles.display_none}>
+    <div className={!isClose ? styles.wrapper : styles.display_none} data-test-id='error'>
       <div className={styles.swg_wrapper}>
         <Warning />
       </div>

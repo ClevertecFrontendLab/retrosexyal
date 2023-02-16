@@ -17,7 +17,7 @@ export const BookButton: React.FC<TProps> = ({ title, className }) => {
   }
   return (
     <div className={`${styles.wrapper} ${buttonColor} ${className} `}>
-      {title || "нет инфо"}
+      {title || "забронировать"}
     </div>
   );
 };

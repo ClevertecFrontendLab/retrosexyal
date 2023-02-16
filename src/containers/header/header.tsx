@@ -22,6 +22,7 @@ import { RootState } from "../../redux/store";
 export const Header = () => {
   const [isPressed, setIsPressed] = useState(false);
   const { status } = useSelector((state: RootState) => state.books);
+  const categorys = useSelector((state: RootState) => state.categorys);
   const refMenu = createRef<HTMLDivElement>();
 
   const handleBurger = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,7 +62,8 @@ export const Header = () => {
 
   return (
     <div className={styles.header_wrapper}>
-      {status === "error" && <Error/>}
+      {status === "error" && <Error />}
+      {categorys.status === "error" && <Error />}
       <Link className={styles.none} to="/">
         <Logo />
       </Link>

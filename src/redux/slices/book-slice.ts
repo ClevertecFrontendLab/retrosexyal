@@ -1,23 +1,25 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import type { IBook, BooksState } from "../../types/types";
+import type { IBook, BooksState, ILinkedBook } from "../../types/types";
 import { Status } from "../../types/types";
-
-/* interface IProps {
-  id: string;
-} */
 
 const initialState: BooksState = {
   books: [],
   loading: false,
   status: Status.LOADING,
+  book: undefined,
 };
 
-export const fetchBooks = createAsyncThunk("bookSlice/getBooks", async (id?:string) => {
-  const responce = await axios.get(`https://strapi.cleverland.by/api/books/${id || ""}`);
-  const data = await responce.data;
-  return data as IBook[];
-});
+export const fetchBooks = createAsyncThunk(
+  "bookSlice/getBooks",
+  async (id?: string) => {
+    const responce = await axios.get(
+      `https://strapi.cleverland.by/api/books/${id || ""}`
+    );
+    const data = await responce.data;
+    return data as typeof data;
+  }
+);
 
 export const bookSlice = createSlice({
   name: "books",
@@ -31,9 +33,13 @@ export const bookSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchBooks.fulfilled,
-      (state, action: PayloadAction<IBook[]>) => {
+      (state, action: PayloadAction<IBook[] | ILinkedBook>) => {
         const thisState = state;
-        thisState.books = action.payload;
+        if (Array.isArray(action.payload)) {
+          thisState.books = action.payload as IBook[];
+        } else {
+          thisState.book = action.payload as ILinkedBook;
+        }
         thisState.loading = false;
         thisState.status = Status.COMLETED;
       }

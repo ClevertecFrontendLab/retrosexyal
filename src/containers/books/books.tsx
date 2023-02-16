@@ -11,32 +11,35 @@ import { IBook } from "../../types/types";
 
 export const Books = () => {
   const dispatch = useAppDispatch();
- 
+
   const { books, loading } = useSelector((state: RootState) => state.books);
   const bookTheme = useSelector(
     (state: RootState) => state.bookThemeReducer.value
   );
   useEffect(() => {
-    dispatch(fetchBooks());
-   
-  }, [dispatch]);
+    if (books.length === 0) {
+      dispatch(fetchBooks(""));
+    }
+  }, [dispatch, books.length]);
   return (
     <div className={styles.wrapper}>
-       {!loading && books.map((e: IBook) => (
-        <Link
-          to={`book/:${e.id}`}
-          key={e.id}
-          className={bookTheme ? styles.book_wrapp : styles.book_wrapp2}
-        >
-          <Book
-            img={`https://strapi.cleverland.by${e.image?.url}`}
-            rating={e?.rating}
-            name={e?.title}
-            autor={e?.authors[0]}
-            status={e.delivery?.dateHandedFrom}
-          />
-        </Link>
-      ))}
+      {!loading &&
+        books.length > 0 &&
+        books.map((e: IBook) => (
+          <Link
+            to={`books/all/:${e.id}`}
+            key={e.id}
+            className={bookTheme ? styles.book_wrapp : styles.book_wrapp2}
+          >
+            <Book
+              img={`https://strapi.cleverland.by${e.image?.url}`}
+              rating={e?.rating}
+              name={e?.title}
+              autor={e?.authors[0]}
+              status={e.delivery?.dateHandedFrom}
+            />
+          </Link>
+        ))}
     </div>
   );
 };

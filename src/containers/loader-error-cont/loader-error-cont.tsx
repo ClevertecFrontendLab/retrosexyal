@@ -5,7 +5,8 @@ import { Loader } from "../../components/loader";
 import { RootState } from "../../redux/store";
 
 export const LoaderErrorCont = () => {
-  const { loading, status } = useSelector((state: RootState) => state.books);
+  const { loading } = useSelector((state: RootState) => state.books);
+  const categorys = useSelector((state: RootState) => state.categorys);
   useEffect(() => {
     const { style } = document.body;
     if (loading) {
@@ -19,7 +20,8 @@ export const LoaderErrorCont = () => {
   }, [loading]);
   return (
     <div>
-      {loading && <Loader />}
+      {loading  && <Loader />}
+      {categorys.loading && <Loader />}
     </div>
   );
 };

@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Link, NavLink, useLocation, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import styles from "./menu-contant.module.scss";
 import { menuList } from "../../constants/constants";
 
 import { ReactComponent as MenyToogleIcon } from "../../assets/svg/menu_toggle_icon.svg";
+import { RootState, useAppDispatch } from "../../redux/store";
+import { fetchCategory } from "../../redux/slices/category-slice";
 
 export const MenuContant = ({
   className,
@@ -13,21 +16,27 @@ export const MenuContant = ({
   className?: string;
   burger: boolean;
 }) => {
-  const [isHidden, setIsHidden] = useState(true);
-
   const initialIsBurger = window.innerWidth > 769 ? false : true;
+  const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
+  const { categorys } = useSelector((state: RootState) => state.categorys);
+  const { books } = useSelector((state: RootState) => state.books);
+
+  const [isHidden, setIsHidden] = useState(true);
   const [isBurger, setIsburger] = useState(initialIsBurger);
 
   const handleHiddenMenu = () => {
     setIsHidden((prev) => !prev);
   };
 
-  const { pathname } = useLocation();
-
   const resize = useCallback(() => {
     const isBurger = window.innerWidth > 769 ? false : true;
     setIsburger(isBurger);
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, [dispatch]);
 
   useEffect(() => {
     window.addEventListener("resize", resize);
@@ -38,6 +47,7 @@ export const MenuContant = ({
       window.removeEventListener("resize", resize);
     };
   }, [resize, pathname]);
+
   return (
     <aside className={`${styles.wrapper} ${className}`}>
       <NavLink
@@ -65,22 +75,27 @@ export const MenuContant = ({
       <div className={!isHidden ? styles.navlink_gap : ""}> </div>
 
       <div className={isHidden ? styles.category : styles.display_none}>
-        {menuList.map((e, ind) => (
+        <NavLink
+          to="/"
+          data-test-id={
+            !isBurger ? "navigation-books" : isBurger ? "burger-books" : ""
+          }
+          className={({ isActive }) =>
+            isActive ? `${styles.active_menu_link}` : styles.menu_link
+          }
+        >
+          <div>Все книги</div>
+          <span className={styles.count}>{books.length}</span>
+        </NavLink>
+        {categorys.map((e, ind) => (
           <NavLink
-            key={e}
-            to={ind === 0 ? "/" : `/test${ind}`}
-            data-test-id={
-              ind === 0 && !isBurger
-                ? "navigation-books"
-                : ind === 0 && isBurger
-                ? "burger-books"
-                : ""
-            }
+            key={e.id}
+            to={`/test${e.id}`}
             className={({ isActive }) =>
               isActive ? `${styles.active_menu_link}` : styles.menu_link
             }
           >
-            <div>{e}</div>
+            <div>{e.name}</div>
             <span className={styles.count}>{ind}</span>
           </NavLink>
         ))}

@@ -9,9 +9,10 @@ import { arrOfBooks } from "../../constants/constants";
 import styles from "./slider.module.scss";
 import "swiper/css";
 import "swiper/css/pagination";
+import { Image } from "../../types/types";
 
 interface IProps {
-  images: string[];
+  images: Image[] | undefined;
 }
 
 export const Slider: React.FC<IProps> = ({ images }) => {
@@ -35,7 +36,6 @@ export const Slider: React.FC<IProps> = ({ images }) => {
         spaceBetween={50}
         slidesPerView={1}
         navigation={true}
-        
         onSwiper={(swiper) => {
           if (swiper1Ref.current !== null) {
             /*   swiper1Ref.current = swiper; */
@@ -48,28 +48,37 @@ export const Slider: React.FC<IProps> = ({ images }) => {
         onSlideChange={() => console.log("slide change")}
         className="myswiper2"
       >
-        {images.map((image) => (
+        {images?.map((image) => (
           <SwiperSlide className="img">
-            <img src={image} alt="img" />
+            <img
+              src={`https://strapi.cleverland.by${image.url}`}
+              alt="img"
+              loading="lazy"
+            />
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {images.length > 1 && <Swiper
-        controller={{ control: firstSwiper }}
-        modules={[Thumbs]}
-        watchSlidesProgress={true}
-        onSwiper={setThumbsSwiper}
-        slidesPerView={4}
-        spaceBetween={10}
-        className="myswiper hidden_slider"
-      >
-        {images.map((image) => (
-          <SwiperSlide className="swiper-pagination-bullet img" data-test-id='slide-mini' >
-            <img src={image} alt="img" />
-          </SwiperSlide>
-        ))}
-      </Swiper>}
+      {images && images.length > 1 && (
+        <Swiper
+          controller={{ control: firstSwiper }}
+          modules={[Thumbs]}
+          watchSlidesProgress={true}
+          onSwiper={setThumbsSwiper}
+          slidesPerView={4}
+          spaceBetween={10}
+          className="myswiper hidden_slider"
+        >
+          {images.map((image) => (
+            <SwiperSlide
+              className="swiper-pagination-bullet img"
+              data-test-id="slide-mini"
+            >
+              <img src={`https://strapi.cleverland.by${image.url}`} alt="img" />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
     </div>
   );
 };

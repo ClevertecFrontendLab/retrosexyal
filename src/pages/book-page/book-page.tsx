@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { BookButton } from "../../components/buttons/book-button";
@@ -11,119 +11,143 @@ import { Review } from "../../components/review";
 import { Slider } from "../../components/slider";
 import emptyBookImg from "../../assets/png/empty-book-img.png";
 import { RootState, useAppDispatch } from "../../redux/store";
-
+import { fetchBooks } from "../../redux/slices/book-slice";
 
 export const BookPage = () => {
   const [isActive, setIsActive] = useState(false);
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const currentBook = useSelector((state:RootState)=>state.books.books)
-  const book = arrOfBooks.filter((e) =>
-    id ? e.id.toString() === id?.slice(1) : null
-  );
-  console.log(book[0]);
+  const currentBook = useSelector((state: RootState) => state.books.book);
+  const book = arrOfBooks;
+  console.log(currentBook);
+
   const toggleComments = () => {
     setIsActive((prev) => !prev);
   };
+  useEffect(() => {
+    if (currentBook && id && `${currentBook.id}` === id?.slice(1)) {
+      console.log(currentBook);
+    } else dispatch(fetchBooks(id?.slice(1)));
+  }, [dispatch, id, currentBook]);
   return (
-    <section className="book-page">
-      <PathToBook />
+    <>
+      {currentBook && (
+        <section className="book-page">
+          <PathToBook />
+          <div className={styles.main_info_wrapper}>
+            <div className={styles.img_wrapper}>
+              {currentBook?.images?.length !== 0 &&
+                currentBook &&
+                currentBook.images && <Slider images={currentBook?.images} />}
+              {currentBook?.images?.length === 0 && (
+                <img src={emptyBookImg} alt="img" />
+              )}
+            </div>
+            <div className={styles.main_info_text}>
+              <h2>{currentBook.title}</h2>
+              <p>{currentBook.authors.map((e) => e)}</p>
+              <BookButton
+                title={book[0].status || "dsds"}
+                className={styles.button}
+              />
+              <p
+                className={
+                  book[0].imgArr && book[0].imgArr?.length > 1
+                    ? `${styles.styled_subtitle} ${styles.extra_margin}`
+                    : styles.styled_subtitle
+                }
+              >
+                О книге
+              </p>
+              <p className={styles.about_book_text}>
+                {currentBook?.description}
+              </p>
+            </div>
+          </div>
 
-      
-      <div className={styles.main_info_wrapper}>
-        <div className={styles.img_wrapper}>
-          {book[0].imgArr?.length !== 0 && book[0].imgArr && (
-            <Slider images={book[0].imgArr} />
-          )}
-          {book[0].imgArr?.length === 0 && <img src={emptyBookImg} alt="img" />}
-        </div>
-        <div className={styles.main_info_text}>
-          <h2>{book[0].name}</h2>
-          <p>{book[0].autor}</p>
-          <BookButton title={book[0].status} className={styles.button} />
-          <p className={book[0].imgArr && book[0].imgArr?.length > 1 ? `${styles.styled_subtitle} ${styles.extra_margin}` : styles.styled_subtitle }>О книге</p>
-          <p className={styles.about_book_text}>{book[0].about}</p>
-        </div>
-      </div>
-
-
-
-      <div className={styles.rating_container}>
-        <p className={styles.styled_subtitle}>Рейтинг</p>
-        <div className={styles.rating_wrapper}>
-          {book[0].rating !== 0 && (
-            <Rating rating={book[0].rating} width="24px" height="24px" />
-          )}
-          {book[0].rating === 0 && (
-            <Rating
-              showEmpty={true}
-              rating={book[0].rating}
-              width="24px"
-              height="24px"
-            />
-          )}
-          <p>{book[0].rating ? book[0].rating : "ещё нет оценок"}</p>
-        </div>
-      </div>
-      <p className={styles.styled_subtitle}>Подробная информация</p>
-      <div className={styles.info_wrapper}>
-        <div className={styles.column1}>
-          <div className={styles.row}>
-            <p className={styles.details_title}>Издательство</p>
-            <p>Питер</p>
+          <div className={styles.rating_container}>
+            <p className={styles.styled_subtitle}>Рейтинг</p>
+            <div className={styles.rating_wrapper}>
+              {currentBook.rating !== 0 && (
+                <Rating
+                  rating={currentBook.rating}
+                  width="24px"
+                  height="24px"
+                />
+              )}
+              {currentBook.rating === 0 && (
+                <Rating
+                  showEmpty={true}
+                  rating={currentBook.rating}
+                  width="24px"
+                  height="24px"
+                />
+              )}
+              <p>
+                {currentBook.rating ? currentBook.rating : "ещё нет оценок"}
+              </p>
+            </div>
           </div>
-          <div className={styles.row}>
-            <p className={styles.details_title}>Год издания</p>
-            <p>2019</p>
+          <p className={styles.styled_subtitle}>Подробная информация</p>
+          <div className={styles.info_wrapper}>
+            <div className={styles.column1}>
+              <div className={styles.row}>
+                <p className={styles.details_title}>Издательство</p>
+                <p>{currentBook.publish}</p>
+              </div>
+              <div className={styles.row}>
+                <p className={styles.details_title}>Год издания</p>
+                <p>{currentBook.issueYear}</p>
+              </div>
+              <div className={styles.row}>
+                <p className={styles.details_title}>Переплет</p>
+                <p>{currentBook.cover}</p>
+              </div>
+              <div className={styles.row}>
+                <p className={styles.details_title}>Формат</p>
+                <p>{currentBook.format}</p>
+              </div>
+            </div>
+            <div className={styles.column2}>
+              <div className={styles.row}>
+                <p className={styles.details_title}>Жанр</p>
+                <p>{currentBook.categories[0]}</p>
+              </div>
+              <div className={styles.row}>
+                <p className={styles.details_title}>Вес</p>
+                <p>{currentBook.weight} г</p>
+              </div>
+              <div className={styles.row}>
+                <p className={styles.details_title}>ISNB</p>
+                <p>{currentBook.ISBN}</p>
+              </div>
+              <div className={styles.row}>
+                <p className={styles.details_title}>Изготовитель</p>
+                <p>{currentBook.producer}</p>
+              </div>
+            </div>
           </div>
-          <div className={styles.row}>
-            <p className={styles.details_title}>Переплет</p>
-            <p>Мягкая обложка</p>
-          </div>
-          <div className={styles.row}>
-            <p className={styles.details_title}>Формат</p>
-            <p>70х100</p>
-          </div>
-        </div>
-        <div className={styles.column2}>
-          <div className={styles.row}>
-            <p className={styles.details_title}>Жанр</p>
-            <p>Компьютерная литература</p>
-          </div>
-          <div className={styles.row}>
-            <p className={styles.details_title}>Вес</p>
-            <p>370 г</p>
-          </div>
-          <div className={styles.row}>
-            <p className={styles.details_title}>ISNB</p>
-            <p>9889-989-8-44</p>
-          </div>
-          <div className={styles.row}>
-            <p className={styles.details_title}>Изготовитель</p>
-            <p>
-              ОАО &apos;Питер Мейл&apos;. РФ, 198206, г. Санкт-Петербург,
-              Петергофское ш, д. 73, лит. А29
+          <div className={styles.reviews}>
+            <p className={styles.styled_subtitle}>
+              Отзывы
+              <p className={styles.review_counter}>{book[0].comments.length}</p>
+              <button
+                onClick={toggleComments}
+                type="button"
+                className={styles.toggle}
+                data-test-id="button-hide-reviews"
+              >
+                <MenyToogleIcon
+                  className={isActive ? "" : styles.toggle_closed}
+                />
+              </button>
             </p>
-          </div>
-        </div>
-      </div>
-      <div className={styles.reviews}>
-        <p className={styles.styled_subtitle}>
-          Отзывы
-          <p className={styles.review_counter}>{book[0].comments.length}</p>
-          <button
-            onClick={toggleComments}
-            type="button"
-            className={styles.toggle}
-            data-test-id="button-hide-reviews"
-          >
-            <MenyToogleIcon className={isActive ? "" : styles.toggle_closed} />
-          </button>
-        </p>
 
-        {isActive && book[0].comments.map((e) => <Review review={e} />)}
-        <BookButton title="Оценить книгу" />
-      </div>
-    </section>
+            {isActive && book[0].comments.map((e) => <Review review={e} />)}
+            <BookButton title="Оценить книгу" />
+          </div>
+        </section>
+      )}{" "}
+    </>
   );
 };
