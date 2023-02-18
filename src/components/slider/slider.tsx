@@ -36,16 +36,9 @@ export const Slider: React.FC<IProps> = ({ images }) => {
         spaceBetween={50}
         slidesPerView={1}
         navigation={true}
-        onSwiper={(swiper) => {
-          if (swiper1Ref.current !== null) {
-            /*   swiper1Ref.current = swiper; */
-            /* swiper = swiper1Ref.current; */
-          }
-        }}
         thumbs={{
           swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
         }}
-        onSlideChange={() => console.log("slide change")}
         className="myswiper2"
       >
         {images?.map((image) => (

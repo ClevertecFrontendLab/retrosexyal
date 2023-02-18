@@ -2,20 +2,14 @@
 
 .input {
   display: none;
-
-  /* &:checked + div {
-    color: #f83600;
-    font-size: 18px;
-    font-weight: 700;
-  } */
 }
 .label {
-    display: flex;
-    font-size: 16px;
-    color: #363636;
+  display: flex;
+  font-size: 16px;
+  color: #363636;
 }
-.active{
+.active {
   color: #f83600;
-    font-size: 18px;
-    font-weight: 700;
+  font-size: 18px;
+  font-weight: 700;
 }

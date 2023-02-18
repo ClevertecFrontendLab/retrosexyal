@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { Link, NavLink, useLocation, useParams } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
 
 import styles from "./menu.module.scss";
 import { menuList } from "../../constants/constants";

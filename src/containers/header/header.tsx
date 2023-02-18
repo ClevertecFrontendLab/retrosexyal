@@ -15,9 +15,10 @@ import { Logo } from "../../components/logo";
 import { MenuContant } from "../../components/menu-contant";
 import { Person } from "../../components/person";
 import { Error } from "../../components/error";
-import styles from "./header.module.scss";
-
 import { RootState } from "../../redux/store";
+import { routes } from "../../constants/routes";
+
+import styles from "./header.module.scss";
 
 export const Header = () => {
   const [isPressed, setIsPressed] = useState(false);
@@ -63,7 +64,7 @@ export const Header = () => {
   return (
     <div className={styles.header_wrapper}>
       {(status === "error" || categorys.status === "error") && <Error />}
-      <Link className={styles.none} to="/">
+      <Link className={styles.none} to={routes.main}>
         <Logo />
       </Link>
       <button

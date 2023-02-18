@@ -16,24 +16,23 @@ import { fetchBooks } from "../../redux/slices/book-slice";
 export const BookPage = () => {
   const [isActive, setIsActive] = useState(false);
   const { id } = useParams();
-  const currentId = id?.startsWith(":")? id.slice(1) : id;
+  const currentId = id?.startsWith(":") ? id.slice(1) : id;
   const dispatch = useAppDispatch();
   const currentBook = useSelector((state: RootState) => state.books.book);
   const book = arrOfBooks;
-  console.log(currentBook);
 
   const toggleComments = () => {
     setIsActive((prev) => !prev);
   };
 
   useEffect(() => {
-    console.log(id)
     if (currentBook && id && `${currentBook.id}` === currentId) {
-      console.log(currentBook);
+      const plug = {};
     } else dispatch(fetchBooks(currentId));
   }, [dispatch, id, currentBook, currentId]);
   return (
     <>
+      {}
       {currentBook && (
         <section className="book-page">
           <PathToBook />
@@ -133,8 +132,8 @@ export const BookPage = () => {
           <div className={styles.reviews}>
             <p className={styles.styled_subtitle}>
               Отзывы
-              <p className={styles.review_counter}>{book[0].comments.length}</p>
-              <button
+              {currentBook.comments ? <p className={styles.review_counter}>{currentBook?.comments?.length}</p> :<p className={styles.review_counter}>0</p>}
+              {currentBook.comments && <button
                 onClick={toggleComments}
                 type="button"
                 className={styles.toggle}
@@ -143,10 +142,9 @@ export const BookPage = () => {
                 <MenyToogleIcon
                   className={isActive ? "" : styles.toggle_closed}
                 />
-              </button>
+              </button>}
             </p>
-
-            {isActive && book[0].comments.map((e) => <Review review={e} />)}
+            {isActive && currentBook.comments && currentBook.comments.map((e) => <Review review={e} key={e.id} />)}
             <BookButton title="Оценить книгу" />
           </div>
         </section>

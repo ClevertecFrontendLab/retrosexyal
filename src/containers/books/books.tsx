@@ -8,6 +8,7 @@ import { arrOfBooks } from "../../constants/constants";
 import { RootState, useAppDispatch } from "../../redux/store";
 import { fetchBooks } from "../../redux/slices/book-slice";
 import { IBook } from "../../types/types";
+import { routes } from "../../constants/routes";
 
 export const Books = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +28,7 @@ export const Books = () => {
         books.length > 0 &&
         books.map((e: IBook) => (
           <Link
-            to={`books/all/:${e.id}`}
+            to={`${routes.booksAll}:${e.id}`}
             key={e.id}
             className={bookTheme ? styles.book_wrapp : styles.book_wrapp2}
           >

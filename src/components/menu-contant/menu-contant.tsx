@@ -2,12 +2,12 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Link, NavLink, useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import styles from "./menu-contant.module.scss";
-import { menuList } from "../../constants/constants";
-
 import { ReactComponent as MenyToogleIcon } from "../../assets/svg/menu_toggle_icon.svg";
 import { RootState, useAppDispatch } from "../../redux/store";
 import { fetchCategory } from "../../redux/slices/category-slice";
+import { routes } from "../../constants/routes";
+
+import styles from "./menu-contant.module.scss";
 
 export const MenuContant = ({
   className,
@@ -40,7 +40,7 @@ export const MenuContant = ({
 
   useEffect(() => {
     window.addEventListener("resize", resize);
-    if (pathname === "/rules" || pathname === "/contract") {
+    if (pathname === `${routes.rules}` || pathname === `${routes.contract}`) {
       setIsHidden(false);
     }
     return () => {
@@ -51,9 +51,9 @@ export const MenuContant = ({
   return (
     <aside className={`${styles.wrapper} ${className}`}>
       <NavLink
-        to="/"
+        to={routes.main}
         className={({ isActive }) =>
-          pathname !== "/rules" && pathname !== "/contract"
+          pathname !== `${routes.rules}` && pathname !== `${routes.contract}`
             ? `${styles.active} ${styles.link_main}`
             : styles.link_main
         }
@@ -76,7 +76,7 @@ export const MenuContant = ({
 
       <div className={isHidden ? styles.category : styles.display_none}>
         <NavLink
-          to="/"
+          to={routes.main}
           data-test-id={
             !isBurger ? "navigation-books" : isBurger ? "burger-books" : ""
           }
@@ -90,7 +90,7 @@ export const MenuContant = ({
         {categorys.map((e, ind) => (
           <NavLink
             key={e.id}
-            to={`/test${e.id}`}
+            to={`${e.path}`}
             className={({ isActive }) =>
               isActive ? `${styles.active_menu_link}` : styles.menu_link
             }
@@ -104,7 +104,7 @@ export const MenuContant = ({
       <div className={styles.link_wrapper}>
         <div>
           <NavLink
-            to="/rules"
+            to={routes.rules}
             className={({ isActive }) =>
               isActive ? `${styles.active} ${styles.link}` : styles.link
             }
@@ -115,7 +115,7 @@ export const MenuContant = ({
         </div>
         <div>
           <NavLink
-            to="/contract"
+            to={routes.contract}
             className={({ isActive }) =>
               isActive ? `${styles.active} ${styles.link}` : styles.link
             }

@@ -4,16 +4,16 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import { MainPage } from "./pages/main";
-import { store } from "./redux/store";
-
-import "./index.css";
 import { Header } from "./containers/header";
 import { BookPage } from "./pages/book-page";
 import { Footer } from "./containers/footer";
 import { Slider } from "./components/slider";
-import { Loader } from "./components/loader";
 import { LoaderErrorCont } from "./containers/loader-error-cont";
 
+import { routes } from "./constants/routes";
+import { store } from "./redux/store";
+
+import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -24,9 +24,8 @@ root.render(
         <div className="wrapper">
           <Header />
           <Routes>
-            <Route path="/*" element={<MainPage />} />
-            <Route path="/books/all/:id" element={<BookPage />} />
-            <Route path="/test" element={<Slider />} />
+            <Route path={`${routes.main}*`} element={<MainPage />} />
+            <Route path={`${routes.booksAll}:id`} element={<BookPage />} />
           </Routes>
           <Footer />
         </div>
