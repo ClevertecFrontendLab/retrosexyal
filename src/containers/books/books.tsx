@@ -47,7 +47,7 @@ export const Books = () => {
                 {e.categories.includes(currentCategory[0].name) &&
                   books.filter((book) => book.categories.includes(currentCategory[0].name)).length !== 0 && (
                     <Link
-                      to={`/books/${currentCategory[0].path}/:${e.id}`}
+                      to={`/books/${currentCategory[0].path}/${e.id}`}
                       key={e.id}
                       className={bookTheme ? styles.book_wrapp : styles.book_wrapp2}
                     >
