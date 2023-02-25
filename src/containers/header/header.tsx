@@ -10,7 +10,9 @@ import { Logo } from '../../components/logo';
 import { MenuContant } from '../../components/menu-contant';
 import { Person } from '../../components/person';
 import { routes } from '../../constants/routes';
-import { RootState } from '../../redux/store';
+import { fetchBooks } from '../../redux/slices/book-slice';
+import { fetchCategory } from '../../redux/slices/category-slice';
+import { RootState, useAppDispatch } from '../../redux/store';
 
 import styles from './header.module.scss';
 
@@ -21,6 +23,7 @@ export const Header = () => {
   const refMenu = createRef<HTMLDivElement>();
   const initialIsBurger = window.innerWidth > 769 ? false : true;
   const [isBurger, setIsburger] = useState(initialIsBurger);
+  const dispatch = useAppDispatch();
 
   const handleBurger = (event: React.MouseEvent<HTMLButtonElement>) => {
     setIsPressed(!isPressed);
@@ -58,6 +61,11 @@ export const Header = () => {
       window.removeEventListener('resize', resize);
     };
   }, [resize]);
+
+  useEffect(() => {
+    dispatch(fetchBooks(''));
+    dispatch(fetchCategory());
+  }, [status, categorys.status, dispatch]);
 
   return (
     <div className={styles.header_wrapper}>
