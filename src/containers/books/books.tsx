@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 import { Book } from '../../components/book';
 import { routes } from '../../constants/routes';
@@ -40,14 +40,14 @@ export const Books = () => {
       currentCategory[0] &&
       currentCategory[0].name
         ? [...books]
-            .sort((a, b) => (a.rating > b.rating ? (value ? -1 : 1) : value ? 1 : -1))
+            .sort((a, b) => (a.rating > b.rating ? (value ? 1 : -1) : value ? -1 : 1))
             .filter((filtredBook) => filtredBook.title.toLowerCase().includes(searchValue.toLowerCase()))
             .map((e: IBook) => (
               <React.Fragment key={e.id}>
                 {e.categories.includes(currentCategory[0].name) &&
                   books.filter((book) => book.categories.includes(currentCategory[0].name)).length !== 0 && (
                     <Link
-                      to={`${routes.booksAll}:${e.id}`}
+                      to={`/books/${currentCategory[0].path}/:${e.id}`}
                       key={e.id}
                       className={bookTheme ? styles.book_wrapp : styles.book_wrapp2}
                     >
@@ -67,7 +67,7 @@ export const Books = () => {
             .sort((a, b) => (a.rating > b.rating ? (value ? 1 : -1) : value ? -1 : 1))
             .filter((filtredBook) => filtredBook.title.toLowerCase().includes(searchValue.toLowerCase()))
             .map((e: IBook) => (
-              <Link to={`/books/${e.id}`} key={e.id} className={bookTheme ? styles.book_wrapp : styles.book_wrapp2}>
+              <Link to={`/books/all/${e.id}`} key={e.id} className={bookTheme ? styles.book_wrapp : styles.book_wrapp2}>
                 <Book
                   img={`https://strapi.cleverland.by${e.image?.url}`}
                   rating={e?.rating}
@@ -90,8 +90,6 @@ export const Books = () => {
         )}
       {!loading &&
         books.length > 0 &&
-        currentCategory[0] &&
-        currentCategory[0].name &&
         [...books].filter((filtredBook) => filtredBook.title.toLowerCase().includes(searchValue.toLowerCase()))
           .length === 0 && (
           <div className={styles.emptyBookFlexCont}>

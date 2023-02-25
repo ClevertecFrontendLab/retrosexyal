@@ -19,6 +19,8 @@ export const Header = () => {
   const { status } = useSelector((state: RootState) => state.books);
   const categorys = useSelector((state: RootState) => state.categorys);
   const refMenu = createRef<HTMLDivElement>();
+  const initialIsBurger = window.innerWidth > 769 ? false : true;
+  const [isBurger, setIsburger] = useState(initialIsBurger);
 
   const handleBurger = (event: React.MouseEvent<HTMLButtonElement>) => {
     setIsPressed(!isPressed);
@@ -44,6 +46,9 @@ export const Header = () => {
 
   const resize = useCallback(() => {
     setIsPressed(false);
+    const isBurgerNow = window.innerWidth > 1010 ? false : true;
+
+    setIsburger(isBurgerNow);
   }, []);
 
   useEffect(() => {
@@ -70,14 +75,16 @@ export const Header = () => {
         {!isPressed ? <Burger /> : <BurgerActive />}
       </button>
 
-      <div
-        className={isPressed ? styles.burger_menu : styles.display_none}
-        ref={refMenu}
-        data-test-id='burger-navigation'
-      >
-        <MenuContant burger={true} />
-        <BurgerMenuComp />
-      </div>
+      {isBurger && (
+        <div
+          className={isPressed ? styles.burger_menu : styles.display_none}
+          ref={refMenu}
+          data-test-id='burger-navigation'
+        >
+          <MenuContant burger={true} />
+          <BurgerMenuComp />
+        </div>
+      )}
 
       <h1>Библиотека</h1>
       <Person className={styles.none} greetings='Привет, Иван!' />

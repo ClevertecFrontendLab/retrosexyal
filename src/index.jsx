@@ -24,7 +24,7 @@ root.render(
           <Header />
           <Routes>
             <Route path='/*' element={<MainPage />} />
-            <Route path={`${routes.booksAll}:id`} element={<BookPage />} />
+            <Route path='/books/:category/:id' element={<BookPage />} />
           </Routes>
           <Footer />
         </div>

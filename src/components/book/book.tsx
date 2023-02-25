@@ -19,20 +19,21 @@ export const Book: React.FC<TProps> = ({ img, rating, name, autor, status }) => 
   const bookTheme = useSelector((state: RootState) => state.bookThemeReducer.value);
   const searchValue = useSelector((state: RootState) => state.serch.searchValue);
 
-  const nameElements = name.split(searchValue).reduce<Array<string | JSX.Element>>((acc, element, index) => {
-    if (index === 0) {
-      return [element];
-    }
-    const keysValue = index;
-
-    return [
-      ...acc,
-      <span key={keysValue} className={styles.selected_text} data-test-id='highlight-matches'>
-        {searchValue}
-      </span>,
-      element,
-    ];
-  }, []);
+  const regex = new RegExp(`(${searchValue})`, 'gi');
+  const nameElements =
+    searchValue !== ''
+      ? name.split(regex).map((element, index) => {
+          const keys = index;
+          if (regex.test(element)) {
+            return (
+              <span key={keys} className={styles.selected_text} data-test-id='highlight-matches'>
+                {element}
+              </span>
+            );
+          }
+          return element;
+        })
+      : name;
 
   return (
     <div data-test-id='card' className={bookTheme ? styles.wrapper_сell : styles.wrapper_line}>
