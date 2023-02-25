@@ -3,6 +3,7 @@
   flex-wrap: wrap;
   margin: 31px 0 0;
   gap: 21.5px;
+  height: 100%;
   @media (max-width: 1108px) {
     justify-content: center;
   }
@@ -31,4 +32,18 @@
     gap: 16px;
     margin: 16px 0px 42px;
   }
+}
+
+.emptyBookCont{
+  font-size: 32px;
+  color: #A7A7A7;
+  font-weight: 700;
+}
+
+.emptyBookFlexCont{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }

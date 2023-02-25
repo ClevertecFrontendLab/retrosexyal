@@ -4,17 +4,17 @@ const initialState = {
   value: true,
 };
 
-export const bookThemeSlice = createSlice({
-  name: 'bookTheme',
+export const sortSlice = createSlice({
+  name: 'sort',
   initialState,
   reducers: {
-    setBookTheme: (state) => {
+    setSort: (state) => {
       const thisState = state;
       thisState.value = !thisState.value;
     },
   },
 });
 
-export const { setBookTheme } = bookThemeSlice.actions;
+export const { setSort } = sortSlice.actions;
 
-export const bookThemeReducer = bookThemeSlice.reducer;
+export const sortReducer = sortSlice.reducer;

@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { BookButton } from "../../components/buttons/book-button";
-import { PathToBook } from "../../components/path-to-book";
-import { Rating } from "../../components/rating";
-import { arrOfBooks } from "../../constants/constants";
-import { ReactComponent as MenyToogleIcon } from "../../assets/svg/menu_toggle_icon.svg";
-import styles from "./book-page.module.scss";
-import { Review } from "../../components/review";
-import { Slider } from "../../components/slider";
-import emptyBookImg from "../../assets/png/empty-book-img.png";
-import { RootState, useAppDispatch } from "../../redux/store";
-import { fetchBooks } from "../../redux/slices/book-slice";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import emptyBookImg from '../../assets/png/empty-book-img.png';
+import { ReactComponent as MenyToogleIcon } from '../../assets/svg/menu_toggle_icon.svg';
+import { BookButton } from '../../components/buttons/book-button';
+import { PathToBook } from '../../components/path-to-book';
+import { Rating } from '../../components/rating';
+import { Review } from '../../components/review';
+import { Slider } from '../../components/slider';
+import { arrOfBooks } from '../../constants/constants';
+import { fetchBooks } from '../../redux/slices/book-slice';
+import { RootState, useAppDispatch } from '../../redux/store';
+
+import styles from './book-page.module.scss';
 
 export const BookPage = () => {
   const [isActive, setIsActive] = useState(false);
   const { id } = useParams();
-  const currentId = id?.startsWith(":") ? id.slice(1) : id;
+  const currentId = id?.startsWith(':') ? id.slice(1) : id;
   const dispatch = useAppDispatch();
   const currentBook = useSelector((state: RootState) => state.books.book);
   const book = arrOfBooks;
@@ -30,28 +32,24 @@ export const BookPage = () => {
       const plug = {};
     } else dispatch(fetchBooks(currentId));
   }, [dispatch, id, currentBook, currentId]);
+
   return (
-    <>
+    <React.Fragment>
       {}
       {currentBook && (
-        <section className="book-page">
+        <section className='book-page'>
           <PathToBook />
           <div className={styles.main_info_wrapper}>
             <div className={styles.img_wrapper}>
-              {currentBook?.images?.length !== 0 &&
-                currentBook &&
-                currentBook.images && <Slider images={currentBook?.images} />}
-              {currentBook?.images?.length === 0 && (
-                <img src={emptyBookImg} alt="img" />
+              {currentBook?.images?.length !== 0 && currentBook && currentBook.images && (
+                <Slider images={currentBook?.images} />
               )}
+              {currentBook?.images?.length === 0 && <img src={emptyBookImg} alt='img' />}
             </div>
             <div className={styles.main_info_text}>
-              <h2>{currentBook.title}</h2>
+              <h2 data-test-id='book-title'>{currentBook.title}</h2>
               <p>{currentBook.authors.map((e) => e)}</p>
-              <BookButton
-                title={book[0].status || "dsds"}
-                className={styles.button}
-              />
+              <BookButton title={book[0].status || 'dsds'} className={styles.button} />
               <p
                 className={
                   book[0].imgArr && book[0].imgArr?.length > 1
@@ -61,33 +59,18 @@ export const BookPage = () => {
               >
                 О книге
               </p>
-              <p className={styles.about_book_text}>
-                {currentBook?.description}
-              </p>
+              <p className={styles.about_book_text}>{currentBook?.description}</p>
             </div>
           </div>
 
           <div className={styles.rating_container}>
             <p className={styles.styled_subtitle}>Рейтинг</p>
             <div className={styles.rating_wrapper}>
-              {currentBook.rating !== 0 && (
-                <Rating
-                  rating={currentBook.rating}
-                  width="24px"
-                  height="24px"
-                />
-              )}
+              {currentBook.rating !== 0 && <Rating rating={currentBook.rating} width='24px' height='24px' />}
               {currentBook.rating === 0 && (
-                <Rating
-                  showEmpty={true}
-                  rating={currentBook.rating}
-                  width="24px"
-                  height="24px"
-                />
+                <Rating showEmpty={true} rating={currentBook.rating} width='24px' height='24px' />
               )}
-              <p>
-                {currentBook.rating ? currentBook.rating : "ещё нет оценок"}
-              </p>
+              <p>{currentBook.rating ? currentBook.rating : 'ещё нет оценок'}</p>
             </div>
           </div>
           <p className={styles.styled_subtitle}>Подробная информация</p>
@@ -132,23 +115,27 @@ export const BookPage = () => {
           <div className={styles.reviews}>
             <p className={styles.styled_subtitle}>
               Отзывы
-              {currentBook.comments ? <p className={styles.review_counter}>{currentBook?.comments?.length}</p> :<p className={styles.review_counter}>0</p>}
-              {currentBook.comments && <button
-                onClick={toggleComments}
-                type="button"
-                className={styles.toggle}
-                data-test-id="button-hide-reviews"
-              >
-                <MenyToogleIcon
-                  className={isActive ? "" : styles.toggle_closed}
-                />
-              </button>}
+              {currentBook.comments ? (
+                <p className={styles.review_counter}>{currentBook?.comments?.length}</p>
+              ) : (
+                <p className={styles.review_counter}>0</p>
+              )}
+              {currentBook.comments && (
+                <button
+                  onClick={toggleComments}
+                  type='button'
+                  className={styles.toggle}
+                  data-test-id='button-hide-reviews'
+                >
+                  <MenyToogleIcon className={isActive ? '' : styles.toggle_closed} />
+                </button>
+              )}
             </p>
             {isActive && currentBook.comments && currentBook.comments.map((e) => <Review review={e} key={e.id} />)}
-            <BookButton title="Оценить книгу" />
+            <BookButton title='Оценить книгу' />
           </div>
         </section>
-      )}{" "}
-    </>
+      )}{' '}
+    </React.Fragment>
   );
 };
