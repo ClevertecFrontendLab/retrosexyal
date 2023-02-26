@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: true,
 };
 
 export const bookThemeSlice = createSlice({
-  name: "bookTheme",
+  name: 'bookTheme',
   initialState,
   reducers: {
     setBookTheme: (state) => {

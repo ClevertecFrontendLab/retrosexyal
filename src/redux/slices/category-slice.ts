@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import type { IBook, BooksState, ILinkedBook, ICategory, IStateCategoty } from "../../types/types";
-import { Status } from "../../types/types";
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
+import type { IBook, BooksState, ILinkedBook, ICategory, IStateCategoty } from '../../types/types';
+import { Status } from '../../types/types';
 
 const initialState: IStateCategoty = {
   categorys: [],
@@ -9,19 +9,14 @@ const initialState: IStateCategoty = {
   status: undefined,
 };
 
-export const fetchCategory = createAsyncThunk(
-  "CategorySlice/getCategory",
-  async () => {
-    const responce = await axios.get(
-      `https://strapi.cleverland.by/api/categories`
-    );
-    const data = await responce.data;
-    return data as typeof data;
-  }
-);
+export const fetchCategory = createAsyncThunk('CategorySlice/getCategory', async () => {
+  const responce = await axios.get(`https://strapi.cleverland.by/api/categories`);
+  const data = await responce.data;
+  return data as typeof data;
+});
 
 export const categorySlice = createSlice({
-  name: "categorys",
+  name: 'categorys',
   initialState,
   reducers: {
     getCategory(state, action: PayloadAction<ICategory[]>) {
@@ -30,15 +25,12 @@ export const categorySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchCategory.fulfilled,
-      (state, action: PayloadAction<ICategory[]>) => {
-        const thisState = state;
-        thisState.categorys = action.payload;
-        thisState.loading = false;
-        thisState.status = Status.COMLETED;
-      }
-    );
+    builder.addCase(fetchCategory.fulfilled, (state, action: PayloadAction<ICategory[]>) => {
+      const thisState = state;
+      thisState.categorys = action.payload;
+      thisState.loading = false;
+      thisState.status = Status.COMLETED;
+    });
     builder.addCase(fetchCategory.pending, (state) => {
       const thisState = state;
       thisState.loading = true;

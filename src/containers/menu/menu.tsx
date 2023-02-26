@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import {  useLocation } from "react-router-dom";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import styles from "./menu.module.scss";
-import { menuList } from "../../constants/constants";
-import { RadioInput } from "../../components/inputs/radio-input";
-import { ReactComponent as MenyToogleIcon } from "../../assets/svg/menu_toggle_icon.svg";
-import { MenuContant } from "../../components/menu-contant";
+import { ReactComponent as MenyToogleIcon } from '../../assets/svg/menu_toggle_icon.svg';
+import { RadioInput } from '../../components/inputs/radio-input';
+import { MenuContant } from '../../components/menu-contant';
+import { menuList } from '../../constants/constants';
+
+import styles from './menu.module.scss';
 
 export const Menu = ({ className }: { className?: string }) => {
   const [isHidden, setIsHidden] = useState(false);
@@ -25,14 +26,12 @@ export const Menu = ({ className }: { className?: string }) => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
+
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener('resize', resize);
     };
   }, [resize]);
-  return (
-    <div className={`${styles.wrapper} ${className}`}>
-      {!isBurger && <MenuContant burger={false} />}
-    </div>
-  );
+
+  return <div className={`${styles.wrapper} ${className}`}>{!isBurger && <MenuContant burger={false} />}</div>;
 };

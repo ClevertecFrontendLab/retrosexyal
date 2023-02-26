@@ -1,22 +1,16 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { Link, NavLink, useLocation, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
 
-import { ReactComponent as MenyToogleIcon } from "../../assets/svg/menu_toggle_icon.svg";
-import { RootState, useAppDispatch } from "../../redux/store";
-import { fetchCategory } from "../../redux/slices/category-slice";
-import { routes } from "../../constants/routes";
+import { ReactComponent as MenyToogleIcon } from '../../assets/svg/menu_toggle_icon.svg';
+import { routes } from '../../constants/routes';
+import { fetchCategory } from '../../redux/slices/category-slice';
+import { RootState, useAppDispatch } from '../../redux/store';
 
-import styles from "./menu-contant.module.scss";
+import styles from './menu-contant.module.scss';
 
-export const MenuContant = ({
-  className,
-  burger,
-}: {
-  className?: string;
-  burger: boolean;
-}) => {
-  const initialIsBurger = window.innerWidth > 769 ? false : true;
+export const MenuContant = ({ className, burger }: { className?: string; burger: boolean }) => {
+  const initialIsBurger = window.innerWidth > 1010 ? false : true;
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const { categorys } = useSelector((state: RootState) => state.categorys);
@@ -30,7 +24,8 @@ export const MenuContant = ({
   };
 
   const resize = useCallback(() => {
-    const isBurger = window.innerWidth > 769 ? false : true;
+    const isBurger = window.innerWidth > 1010 ? false : true;
+
     setIsburger(isBurger);
   }, []);
 
@@ -39,12 +34,13 @@ export const MenuContant = ({
   }, [dispatch]);
 
   useEffect(() => {
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
     if (pathname === `${routes.rules}` || pathname === `${routes.contract}`) {
       setIsHidden(false);
     }
+
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener('resize', resize);
     };
   }, [resize, pathname]);
 
@@ -58,45 +54,43 @@ export const MenuContant = ({
             : styles.link_main
         }
         onClick={handleHiddenMenu}
-        data-test-id={burger ? "burger-showcase" : "navigation-showcase"}
+        data-test-id={burger ? 'burger-showcase' : 'navigation-showcase'}
       >
         Витрина книг
         <div
           className={
-            !isHidden
-              ? styles.main_link_toggle
-              : `${styles.main_link_toggle} ${styles.main_link_toggle_reverse}`
+            !isHidden ? styles.main_link_toggle : `${styles.main_link_toggle} ${styles.main_link_toggle_reverse}`
           }
         >
           <MenyToogleIcon />
         </div>
       </NavLink>
 
-      <div className={!isHidden ? styles.navlink_gap : ""}> </div>
+      <div className={!isHidden ? styles.navlink_gap : ''}> </div>
 
       <div className={isHidden ? styles.category : styles.display_none}>
         <NavLink
           to={routes.main}
-          data-test-id={
-            !isBurger ? "navigation-books" : isBurger ? "burger-books" : ""
-          }
+          data-test-id={!isBurger ? 'navigation-books' : isBurger ? 'burger-books' : ''}
           className={({ isActive }) =>
-            isActive ? `${styles.active_menu_link}` : styles.menu_link
+            isActive || pathname.endsWith('/') ? `${styles.active_menu_link}` : styles.menu_link
           }
         >
           <div>Все книги</div>
-          <span className={styles.count}>{books.length}</span>
         </NavLink>
         {categorys.map((e, ind) => (
           <NavLink
             key={e.id}
-            to={`${e.path}`}
-            className={({ isActive }) =>
-              isActive ? `${styles.active_menu_link}` : styles.menu_link
-            }
+            to={`/books/${e.path}`}
+            className={({ isActive }) => (isActive ? `${styles.active_menu_link}` : styles.menu_link)}
           >
-            <div>{e.name}</div>
-            <span className={styles.count}>{ind}</span>
+            <div data-test-id={!isBurger ? `navigation-${e.path}` : `burger-${e.path}`}>{e.name}</div>
+            <span
+              className={styles.count}
+              data-test-id={!isBurger ? `navigation-book-count-for-${e.path}` : `burger-book-count-for-${e.path}`}
+            >
+              {books.filter((book) => book.categories.includes(e.name)).length}
+            </span>
           </NavLink>
         ))}
       </div>
@@ -105,10 +99,8 @@ export const MenuContant = ({
         <div>
           <NavLink
             to={routes.rules}
-            className={({ isActive }) =>
-              isActive ? `${styles.active} ${styles.link}` : styles.link
-            }
-            data-test-id={burger ? "burger-terms" : "navigation-terms"}
+            className={({ isActive }) => (isActive ? `${styles.active} ${styles.link}` : styles.link)}
+            data-test-id={burger ? 'burger-terms' : 'navigation-terms'}
           >
             <p>Правила пользования</p>
           </NavLink>
@@ -116,10 +108,8 @@ export const MenuContant = ({
         <div>
           <NavLink
             to={routes.contract}
-            className={({ isActive }) =>
-              isActive ? `${styles.active} ${styles.link}` : styles.link
-            }
-            data-test-id={burger ? "burger-contract" : "navigation-contract"}
+            className={({ isActive }) => (isActive ? `${styles.active} ${styles.link}` : styles.link)}
+            data-test-id={burger ? 'burger-contract' : 'navigation-contract'}
           >
             <p>Договор оферты</p>
           </NavLink>
